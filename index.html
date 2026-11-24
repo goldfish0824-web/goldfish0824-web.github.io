@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>英語アプリまとめ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<style>
+/* VOICE everyday：高校生が気軽にのぞく、明るい案内板
+   IDEA リングでとじた単語カードの束。アプリ1つ＝カード1枚
+   PICTURE 帯の右側、リングから扇形に広がる単語カード（ゲーム名入り）
+   COLOUR 白地、コーラルの帯、黄色のリング、アプリごとのカード色
+   TYPE Zen Maru Gothic 900 見出し / 500 本文
+   LAYOUT PC：帯に見出しとカード束、下に絞り込みとカードの棚。スマホ：見出し→カード束→絞り込み→棚 */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#17141c);--ink:light-dark(#231d2c,#f5f0f7);--mute:light-dark(#5f5768,#bdb4c6);--card:light-dark(#ffffff,#221e2a);--edge:light-dark(#e7e1ea,#3a3344);--band:light-dark(#d43945,#8e2b38);--soft:light-dark(#fff1ef,#2a1f27);--ring:#ffd23f;--focus:light-dark(#1f5eff,#9ec0ff)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:90px}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.7 "Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;overflow-x:clip}
+.band{padding-block:clamp(28px,4vw,56px);padding-inline:max(5vw,16px)}
+.wrap{max-width:1240px;margin-inline:auto}
+h1,h2,h3{margin:0;line-height:1.2;text-wrap:balance}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hero{background:var(--band);color:#fff;padding-bottom:0}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:16px 32px;align-items:end}
+.hero-text{padding-bottom:clamp(28px,4vw,56px);align-self:center}
+.hero h1{font-weight:900;font-size:clamp(40px,6vw,64px);line-height:1.08;letter-spacing:-.02em}
+.hero .lead{font-size:17px;max-width:28em;margin:18px 0 0}
+.hero .jump{display:inline-flex;align-items:center;min-height:48px;margin-top:22px;padding:0 24px;border-radius:999px;background:#fff;color:#231d2c;font-weight:900;text-decoration:none}
+.fan{display:block;width:100%;height:auto;max-height:400px}
+.fan text{font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;font-weight:900}
+.fan .c{transform:rotate(var(--a));transform-origin:60px 50px;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.fan:not(.open) .c{transform:rotate(2deg)}
+.bar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--edge);padding:12px max(5vw,16px)}
+.bar .wrap{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-weight:700;font-size:15px;min-height:44px;padding:0 16px;border-radius:999px;border:2px solid var(--edge);background:var(--card);color:var(--ink);cursor:pointer}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip small{font-size:13px;margin-left:6px;opacity:.75}
+.search{flex:1 1 220px;display:flex;justify-content:flex-end}
+.search input{font:inherit;font-size:16px;min-height:44px;width:min(280px,100%);padding:0 16px;border-radius:999px;border:2px solid var(--edge);background:var(--card);color:var(--ink)}
+.shelf h2{font-size:28px;font-weight:900;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:20px}
+.card{position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--edge);border-radius:16px;padding:46px 20px 20px;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:28px;background:var(--c)}
+.card::after{content:"";position:absolute;top:7px;left:14px;width:14px;height:14px;border-radius:50%;background:var(--bg);box-shadow:inset 0 2px 2px rgba(0,0,0,.3)}
+.card h3{font-size:21px;font-weight:900}
+.new{display:inline-block;margin-left:8px;font-size:13px;line-height:1.6;padding:0 8px;border-radius:6px;background:var(--ring);color:#231d2c;vertical-align:3px}
+.catch{font-weight:700;margin:8px 0 0}
+.desc{color:var(--mute);margin:6px 0 0;font-size:15px}
+.meta{margin:8px 0 0;font-size:14px;color:var(--mute)}
+.pw{margin:12px 0 0;font-size:14px;padding:8px 12px;border-radius:10px;background:var(--soft)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;list-style:none;padding:0;margin:14px 0 0}
+.tags li{font-size:13px;font-weight:700;padding:2px 10px;border-radius:999px;border:1px solid var(--edge);white-space:nowrap}
+.tags .wait{background:var(--edge)}
+.acts{margin-top:auto;padding-top:18px;display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:46px;padding:0 22px;border-radius:999px;font-weight:900;text-decoration:none;background:var(--ink);color:var(--bg);border:2px solid var(--ink);white-space:nowrap}
+.btn:hover{background:var(--band);border-color:var(--band);color:#fff}
+.btn.sub{background:transparent;color:var(--ink);border-color:var(--edge)}
+.btn.sub:hover{border-color:var(--ink);background:transparent;color:var(--ink)}
+.btn.off{background:var(--edge);border-color:var(--edge);color:var(--mute);cursor:default}
+.empty{font-size:17px;color:var(--mute);padding:24px 0}
+.tips{background:var(--soft)}
+.tips h2{font-size:28px;font-weight:900;margin-bottom:18px}
+.tipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:16px}
+.tip{background:var(--card);border-radius:16px;padding:20px;border:1px solid var(--edge)}
+.tip h3{font-size:18px;font-weight:900;margin-bottom:6px}
+.tip p{margin:0;font-size:15px;color:var(--mute)}
+.foot{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;align-items:center;font-size:15px;color:var(--mute);border-top:1px solid var(--edge);padding-block:28px}
+.foot p{margin:0}
+.foot a{font-weight:700;color:var(--ink)}
+@media(max-width:760px){.hero .wrap{grid-template-columns:minmax(0,1fr)}.hero-text{padding-bottom:0}.fan{max-height:300px;margin-inline:auto}.search{justify-content:stretch}.search input{width:100%}.chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}.chip{flex:none}}
+@media(prefers-reduced-motion:reduce){.fan .c{transition:none}}
+</style>
+</head>
+<body>
+<header class="band hero">
+  <div class="wrap">
+    <div class="hero-text">
+      <h1>英語アプリ<br>まとめ</h1>
+      <p class="lead">英語の先生がつくった学習アプリの入口です。単語、スピーキング、英検、進路まで。気になるカードを開いてみよう。</p>
+      <a class="jump" href="#shelf">アプリを見る</a>
+    </div>
+    <svg class="fan" id="fan" viewBox="0 0 520 400" aria-hidden="true"></svg>
+  </div>
+</header>
+
+<nav class="bar" aria-label="アプリの絞り込み">
+  <div class="wrap">
+    <div class="chips" id="chips"></div>
+    <label class="search"><span class="vh">アプリを検索</span><input id="q" type="search" placeholder="名前やことばで探す" autocomplete="off"></label>
+  </div>
+</nav>
+
+<main class="band shelf" id="shelf">
+  <div class="wrap">
+    <h2 id="shelf-title">すべてのアプリ</h2>
+    <div class="grid" id="grid"></div>
+    <p class="empty" id="empty" hidden>見つかりませんでした。ほかのことばで探してみてね。</p>
+  </div>
+</main>
+
+<section class="band tips" aria-labelledby="tips-title">
+  <div class="wrap">
+    <h2 id="tips-title">はじめて使う人へ</h2>
+    <div class="tipgrid">
+      <div class="tip"><h3>ホーム画面に追加</h3><p>このページをスマホやタブレットのホーム画面に追加しておくと、すぐに開けます。</p></div>
+      <div class="tip"><h3>マイクは「許可」</h3><p>「マイクを使う」アプリは、最初にマイクを使ってよいか聞かれます。「許可」を選んでください。</p></div>
+      <div class="tip"><h3>イヤホンがあると便利</h3><p>音声を使うアプリは、イヤホンをつけると聞き取りやすく、まわりの人にも気をつかわずにすみます。</p></div>
+      <div class="tip"><h3>パスワードは先生から</h3><p>パスワードが必要なアプリは、先生が授業やプリントで伝えます。ほかの人には広めないでください。</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="band foot">
+  <p>アプリについての質問は、英語の先生まで。</p>
+  <p><a href="teachers.html">先生方へ：授業での使い方はこちら</a></p>
+</footer>
+
+<script src="apps.js"></script>
+<script>
+{
+  const APPS = (window.APPS || []).filter(a => a.student && !a.hidden);
+  const ORDER = ["単語", "話す", "書く", "英検", "進路", "動画"];
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const safeColor = c => /^#[0-9a-f]{3,8}$/i.test(c || "") ? c : "#999999";
+  const darkText = hex => {
+    let h = hex.slice(1); if (h.length === 3) h = h.split("").map(x => x + x).join("");
+    const [r, g, b] = [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16) / 255).map(v => v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4);
+    return .2126 * r + .7152 * g + .0722 * b > .4;
+  };
+
+  /* ---- 上部のカード束 ---- */
+  const fan = document.getElementById("fan");
+  const heroes = APPS.filter(a => a.hero).slice(0, 4);
+  const angles = [4, 20, 36, 52];
+  let g = "";
+  heroes.map((a, i) => ({ a, ang: angles[i] })).reverse().forEach(({ a, ang }) => {
+    const col = safeColor(a.color), ink = darkText(col) ? "#231d2c" : "#ffffff";
+    g += `<g class="c" style="--a:${ang}deg">
+      <rect x="38" y="22" width="406" height="92" rx="14" fill="rgba(0,0,0,.18)"/>
+      <rect x="34" y="14" width="406" height="92" rx="14" fill="${col}"/>
+      <rect x="34" y="14" width="406" height="3" rx="1.5" fill="rgba(255,255,255,.45)"/>
+      <circle cx="60" cy="50" r="10" style="fill:var(--band)"/>
+      <text x="424" y="82" text-anchor="end" font-size="28" fill="${ink}">${esc(a.short || a.name)}</text>
+    </g>`;
+  });
+  fan.innerHTML = g + `<circle cx="46" cy="38" r="24" fill="none" stroke="#b8941c" stroke-width="8"/>
+    <circle cx="46" cy="38" r="24" fill="none" style="stroke:var(--ring)" stroke-width="6"/>
+    <path d="M28 26 A24 24 0 0 1 58 17" fill="none" stroke="#fff8d6" stroke-width="2" stroke-linecap="round"/>`;
+  requestAnimationFrame(() => requestAnimationFrame(() => fan.classList.add("open")));
+
+  /* ---- 絞り込み ---- */
+  const tags = ORDER.filter(t => APPS.some(a => (a.tags || []).includes(t)));
+  let current = "すべて";
+  const chips = document.getElementById("chips");
+  const drawChips = () => {
+    chips.innerHTML = ["すべて", ...tags].map(t => {
+      const n = t === "すべて" ? APPS.length : APPS.filter(a => (a.tags || []).includes(t)).length;
+      return `<button type="button" class="chip" data-t="${esc(t)}" aria-pressed="${t === current}">${esc(t)}<small>${n}</small></button>`;
+    }).join("");
+  };
+
+  /* ---- カード ---- */
+  const card = a => {
+    const open = !!a.url;
+    const labels = [];
+    if (a.inClass) labels.push(["授業で使う", ""]);
+    if (a.mic) labels.push(["マイクを使う", ""]);
+    if (a.password) labels.push(["パスワードが必要", ""]);
+    if (!open) labels.push(["準備中", "wait"]);
+    return `<article class="card" style="--c:${safeColor(a.color)}">
+      <h3>${esc(a.name)}${a.isNew ? '<span class="new">NEW</span>' : ""}</h3>
+      <p class="catch">${esc(a.catch)}</p>
+      ${a.desc ? `<p class="desc">${esc(a.desc)}</p>` : ""}
+      ${a.level ? `<p class="meta">レベル：${esc(a.level)}</p>` : ""}
+      ${a.password ? `<p class="pw">${esc(a.password)}</p>` : ""}
+      ${labels.length ? `<ul class="tags">${labels.map(([t, c]) => `<li class="${c}">${esc(t)}</li>`).join("")}</ul>` : ""}
+      <div class="acts">
+        ${open ? `<a class="btn" href="${esc(a.url)}">ひらく <span aria-hidden="true">→</span></a>` : `<span class="btn off" aria-disabled="true">準備中</span>`}
+        ${a.video ? `<a class="btn sub" href="${esc(a.video)}">使い方動画</a>` : ""}
+      </div>
+    </article>`;
+  };
+
+  const grid = document.getElementById("grid"), empty = document.getElementById("empty"), q = document.getElementById("q"), title = document.getElementById("shelf-title");
+  const draw = () => {
+    const words = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const list = APPS.filter(a => current === "すべて" || (a.tags || []).includes(current))
+      .filter(a => { const hay = [a.name, a.catch, a.desc, a.level, ...(a.tags || [])].join(" ").toLowerCase(); return words.every(w => hay.includes(w)); })
+      .sort((x, y) => (!!y.url - !!x.url) || (!!y.isNew - !!x.isNew));
+    grid.innerHTML = list.map(card).join("");
+    empty.hidden = list.length > 0;
+    title.textContent = current === "すべて" ? "すべてのアプリ" : `「${current}」のアプリ`;
+  };
+  chips.addEventListener("click", e => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    current = b.dataset.t; drawChips(); draw();
+  });
+  q.addEventListener("input", draw);
+  drawChips(); draw();
+}
+</script>
+</body>
+</html>

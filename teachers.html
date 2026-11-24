@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>先生向けアプリ案内</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap">
+<style>
+/* VOICE work：授業準備の合間に先生が見る、整った一覧表
+   IDEA 職員室に貼る案内表と、教室でそのまま映せるQRカード
+   PICTURE 生徒用ページへつながる大きなQRコードのカード（ボタン一つで全画面に映せる）
+   COLOUR 白地、深いスレートの帯、生徒用ページと同じコーラルを差し色に
+   TYPE Zen Kaku Gothic New 900 見出し / 400 本文
+   LAYOUT PC：帯の左に見出しと数字、右にQRカード。下に分類ごとの一覧表。スマホ：見出し→QR→数字→一覧 */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#121419);--ink:light-dark(#171a21,#eef0f4);--mute:light-dark(#585f6c,#a9b0bd);--edge:light-dark(#e3e6eb,#2c313b);--band:light-dark(#26324c,#1b2233);--accent:light-dark(#d43945,#ff6b74);--soft:light-dark(#f4f6f9,#1a1e27);--warn:light-dark(#fff6d6,#2e2815);--focus:light-dark(#1f5eff,#9ec0ff)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.7 "Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;overflow-x:clip}
+.band{padding-block:clamp(28px,4vw,56px);padding-inline:max(5vw,16px)}
+.wrap{max-width:1240px;margin-inline:auto}
+h1,h2,h3{margin:0;line-height:1.2;text-wrap:balance}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.top{background:var(--band);color:#fff}
+.top .wrap{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px 48px;align-items:center}
+.top h1{font-weight:900;font-size:clamp(34px,4.6vw,50px);line-height:1.08;letter-spacing:-.02em}
+.lead{font-size:17px;margin:16px 0 0;max-width:34em;color:#e4e8f0}
+.figs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:28px 0 0;max-width:34em}
+.figs div{border-top:2px solid rgba(255,255,255,.35);padding-top:8px}
+.figs dt{font-size:14px;color:#c9d0dc}
+.figs dd{margin:0;font-size:clamp(28px,3.4vw,40px);font-weight:900;line-height:1.1;white-space:nowrap}
+.figs dd small{font-size:16px;font-weight:700;margin-left:2px}
+.qrcard{margin:0;background:#fff;color:#171a21;border-radius:20px;padding:22px;display:grid;grid-template-columns:minmax(0,170px) minmax(0,1fr);gap:18px;align-items:center;box-shadow:0 0 0 8px var(--accent)}
+.qrcard .qr{aspect-ratio:1;background:#fff}
+.qrcard .qr svg{display:block;width:100%;height:auto}
+.qrcard h2{font-size:20px;font-weight:900}
+.qrcard p{margin:6px 0 0;font-size:14px;color:#585f6c}
+.qrcard .url{font-size:14px;color:#171a21;overflow-wrap:anywhere;font-weight:700}
+.qrcard .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.noqr{display:grid;place-items:center;height:100%;border:2px dashed #c5cad3;border-radius:12px;font-size:13px;color:#585f6c;text-align:center;padding:8px}
+button{font:inherit}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:10px;font-weight:700;font-size:15px;text-decoration:none;background:var(--ink);color:var(--bg);border:2px solid var(--ink);cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.sub{background:transparent;color:var(--ink);border-color:var(--edge)}
+.btn.sub:hover{border-color:var(--ink);background:transparent;color:var(--ink)}
+.qrcard .btn{background:#171a21;color:#fff;border-color:#171a21}
+.qrcard .btn.sub{background:#fff;color:#171a21;border-color:#d5d9e0}
+.draft{background:var(--warn);padding-block:18px;font-size:15px}
+.draft p{margin:0}
+.draft b{font-weight:900}
+.sec{padding-top:clamp(28px,4vw,48px)}
+.sec h2{font-size:26px;font-weight:900}
+.sec .sub{color:var(--mute);margin:6px 0 10px}
+.head,.row{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr) minmax(0,10em) minmax(0,13em);gap:10px 28px}
+.head{font-size:13px;color:var(--mute);padding:8px 0;border-bottom:2px solid var(--ink)}
+.row{padding:18px 0;border-bottom:1px solid var(--edge);align-items:start}
+.who{border-left:6px solid var(--c);padding-left:12px}
+.who h3{font-size:18px;font-weight:900}
+.st{display:inline-block;margin-top:6px;font-size:13px;font-weight:700;padding:1px 10px;border-radius:999px;white-space:nowrap}
+.st.on{background:var(--ink);color:var(--bg)}
+.st.off{border:1px solid var(--edge);color:var(--mute)}
+.lv{margin:6px 0 0;font-size:14px;color:var(--mute)}
+.what p{margin:0}
+.what .catch{font-weight:700}
+.what .note{color:var(--mute);font-size:15px;margin-top:4px}
+.what .lic{font-size:13px;color:var(--mute);margin-top:6px}
+.cost .api{display:inline-block;font-size:14px;font-weight:700;padding:4px 10px;border-radius:8px;background:var(--soft)}
+.cost .api.byo{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.cost .pwn{display:block;margin-top:6px;font-size:13px;color:var(--mute)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.notes ul{margin:12px 0 0;padding-left:1.2em;max-width:52em}
+.notes li{margin:6px 0}
+.notes h2{font-size:24px;font-weight:900}
+.foot{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;font-size:15px;color:var(--mute);border-top:1px solid var(--edge);padding-block:28px}
+.foot p{margin:0}
+.foot a{font-weight:700;color:var(--ink)}
+.modal{position:fixed;inset:0;z-index:20;background:rgba(10,12,18,.82);display:grid;place-items:center;padding:16px}
+.modal[hidden]{display:none}
+.sheet{background:#fff;color:#171a21;border-radius:20px;padding:20px 24px 24px;width:min(94vw,760px);max-height:96vh;overflow:auto;text-align:center}
+.sheet .x{float:right;min-height:44px;padding:0 16px;border-radius:10px;border:2px solid #d5d9e0;background:#fff;color:#171a21;font-weight:700;cursor:pointer}
+.sheet h2{font-size:clamp(22px,3vw,32px);font-weight:900;clear:both;padding-top:4px}
+.sheet .big{width:min(62vh,82vw,560px);margin:14px auto 0}
+.sheet .big svg{display:block;width:100%;height:auto}
+.sheet .murl{margin:12px 0 0;font-size:18px;font-weight:700;overflow-wrap:anywhere}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:10px;font-weight:700;z-index:30}
+.toast[hidden]{display:none}
+@media(max-width:860px){.top .wrap{grid-template-columns:minmax(0,1fr)}.head{display:none}.row{grid-template-columns:minmax(0,1fr)}.acts{justify-content:flex-start}}
+@media(max-width:420px){.qrcard{grid-template-columns:minmax(0,1fr)}.qrcard .qr{width:min(220px,100%);margin-inline:auto}.figs dd{font-size:26px}}
+</style>
+</head>
+<body>
+<header class="band top">
+  <div class="wrap">
+    <div>
+      <h1>先生向け<br>アプリ案内</h1>
+      <p class="lead">英語の授業や学年・進路指導で使える自作アプリの一覧です。生徒には、右のQRコードを教室で映すだけ。生徒用のまとめページから、すべてのアプリに入れます。</p>
+      <dl class="figs" id="figs"></dl>
+    </div>
+    <figure class="qrcard">
+      <div class="qr" id="mainqr"></div>
+      <figcaption>
+        <h2>生徒用ページ</h2>
+        <p class="url" id="mainurl"></p>
+        <div class="row">
+          <button type="button" class="btn" id="bigqr">大きく映す</button>
+          <button type="button" class="btn sub" id="copy">URLをコピー</button>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+</header>
+
+<div class="band draft" id="draft" hidden></div>
+
+<main class="band" style="padding-top:0">
+  <div class="wrap" id="list"></div>
+</main>
+
+<section class="band notes" aria-labelledby="notes-title">
+  <div class="wrap">
+    <h2 id="notes-title">使うときの注意</h2>
+    <ul>
+      <li>AIによる添削・評価は、同じ答えでも毎回少しずつ変わります。成績に入れる評価には、教員の判断を組み合わせてください。</li>
+      <li>パスワード制のアプリのパスワードは、このページには載せていません。授業やプリントで生徒に直接伝えてください。</li>
+      <li>「作者負担」のアプリは、作者のAPIキーで動いています。各先生が自分のAPIキーで使える配布版は、準備ができたものから「自分のAPIキーで使うもの」に載せていきます。</li>
+      <li>ライセンスが CC BY-NC-SA 4.0 のものは、クレジット表記・非営利・同じライセンスでの公開を条件に、改変して使えます。</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="band foot">
+  <p>ご質問・ご感想は作成者まで。</p>
+  <p><a href="index.html">生徒用ページを見る</a></p>
+</footer>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mt">
+  <div class="sheet">
+    <button type="button" class="x" id="mx">閉じる</button>
+    <h2 id="mt"></h2>
+    <div class="big" id="mq"></div>
+    <p class="murl" id="mu"></p>
+  </div>
+</div>
+<p class="toast" id="toast" role="status" hidden></p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="apps.js"></script>
+<script>
+{
+  const APPS = (window.APPS || []).filter(a => a.teacher && !a.hidden);
+  const SITE = window.SITE || {};
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const safeColor = c => /^#[0-9a-f]{3,8}$/i.test(c || "") ? c : "#999999";
+  const API = { none: "無料・API不要", author: "AI使用（作者負担）", byo: "自分のAPIキーが必要" };
+  const GROUPS = [
+    { title: "英語の授業・英語学習で", sub: "生徒用ページにも載っているアプリです。", test: a => a.group !== "all" && a.api !== "byo" },
+    { title: "全教科・学年・進路指導で", sub: "担任業務や進路指導でも使えます。", test: a => a.group === "all" && a.api !== "byo" },
+    { title: "自分のAPIキーで使うもの", sub: "各先生がAI（Claude など）のAPIキーを取得して入力して使います。費用は使った分だけ、各自の負担です。", test: a => a.api === "byo" }
+  ];
+
+  const qrSvg = url => {
+    if (!url || typeof qrcode !== "function") return "";
+    const q = qrcode(0, "M"); q.addData(url); q.make();
+    const n = q.getModuleCount(), m = 3, N = n + m * 2; let d = "";
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) d += `M${c + m} ${r + m}h1v1h-1z`;
+    return `<svg viewBox="0 0 ${N} ${N}" shape-rendering="crispEdges" role="img" aria-label="QRコード"><rect width="${N}" height="${N}" fill="#fff"/><path d="${d}" fill="#000"/></svg>`;
+  };
+
+  /* ---- 生徒用ページのQR ---- */
+  const studentUrl = SITE.studentUrl || "";
+  const mainqr = document.getElementById("mainqr");
+  mainqr.innerHTML = qrSvg(studentUrl) || `<div class="noqr">QRコードを表示できません。apps.js の studentUrl を確認してください。</div>`;
+  document.getElementById("mainurl").textContent = studentUrl || "（URL未設定）";
+
+  /* ---- 数字 ---- */
+  const open = APPS.filter(a => a.url).length;
+  const figs = [["公開中", open], ["準備中", APPS.length - open], ["無料・API不要", APPS.filter(a => a.api === "none").length]];
+  document.getElementById("figs").innerHTML = figs.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${v}<small>本</small></dd></div>`).join("");
+
+  /* ---- URL未設定の一覧（作成者向け） ---- */
+  const missing = APPS.filter(a => !a.url);
+  if (missing.length) {
+    const box = document.getElementById("draft");
+    box.hidden = false;
+    box.innerHTML = `<div class="wrap"><p><b>URL未設定：${missing.length}件。</b>apps.js の url に公開URLを入れると、「開く」「QR」ボタンが使えるようになります（${missing.map(a => esc(a.name)).join("、")}）</p></div>`;
+  }
+
+  /* ---- 一覧 ---- */
+  const row = a => {
+    const on = !!a.url;
+    return `<article class="row" style="--c:${safeColor(a.color)}">
+      <div class="who"><h3>${esc(a.name)}</h3><span class="st ${on ? "on" : "off"}">${on ? "公開中" : "準備中"}</span>${a.level ? `<p class="lv">${esc(a.level)}</p>` : ""}</div>
+      <div class="what"><p class="catch">${esc(a.catch)}</p>${a.teacherNote ? `<p class="note">${esc(a.teacherNote)}</p>` : ""}${a.license ? `<p class="lic">ライセンス：${esc(a.license)}</p>` : ""}</div>
+      <div class="cost"><span class="api ${esc(a.api)}">${esc(API[a.api] || "")}</span>${a.password ? `<span class="pwn">パスワード制</span>` : ""}</div>
+      <div class="acts">
+        ${on ? `<a class="btn" href="${esc(a.url)}">開く</a><button type="button" class="btn sub" data-qr="${esc(a.id)}">QR</button>` : ""}
+        ${a.video ? `<a class="btn sub" href="${esc(a.video)}">使い方動画</a>` : ""}
+        ${a.repo ? `<a class="btn sub" href="${esc(a.repo)}">GitHub</a>` : ""}
+      </div>
+    </article>`;
+  };
+  const head = `<div class="head" aria-hidden="true"><span>アプリ</span><span>内容と授業での使い方</span><span>費用</span><span></span></div>`;
+  document.getElementById("list").innerHTML = GROUPS.map(g => {
+    const items = APPS.filter(g.test).sort((x, y) => !!y.url - !!x.url);
+    if (!items.length) return "";
+    return `<section class="sec"><h2>${esc(g.title)}<small style="font-size:16px;font-weight:700;margin-left:10px;color:var(--mute)">${items.length}本</small></h2><p class="sub">${esc(g.sub)}</p>${head}${items.map(row).join("")}</section>`;
+  }).join("");
+
+  /* ---- QRを大きく映す ---- */
+  const modal = document.getElementById("modal"), mt = document.getElementById("mt"), mq = document.getElementById("mq"), mu = document.getElementById("mu");
+  let back = null;
+  const show = (name, url) => {
+    back = document.activeElement;
+    mt.textContent = name; mu.textContent = url;
+    mq.innerHTML = qrSvg(url) || `<p>QRコードを表示できません。</p>`;
+    modal.hidden = false; document.getElementById("mx").focus();
+  };
+  const hide = () => { modal.hidden = true; if (back) back.focus(); };
+  document.getElementById("bigqr").addEventListener("click", () => show("生徒用ページ", studentUrl));
+  document.getElementById("list").addEventListener("click", e => {
+    const b = e.target.closest("[data-qr]"); if (!b) return;
+    const a = APPS.find(x => x.id === b.dataset.qr); if (a) show(a.name, a.url);
+  });
+  document.getElementById("mx").addEventListener("click", hide);
+  modal.addEventListener("click", e => { if (e.target === modal) hide(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !modal.hidden) hide(); });
+
+  /* ---- URLをコピー ---- */
+  const toast = document.getElementById("toast");
+  const say = t => { toast.textContent = t; toast.hidden = false; clearTimeout(say.t); say.t = setTimeout(() => toast.hidden = true, 2200); };
+  document.getElementById("copy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(studentUrl); say("URLをコピーしました"); }
+    catch { say("コピーできませんでした。URLを選んでコピーしてください"); }
+  });
+}
+</script>
+</body>
+</html>
