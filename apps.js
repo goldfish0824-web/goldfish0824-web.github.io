@@ -80,7 +80,7 @@ window.APPS = [
     license: "CC BY-NC-SA 4.0", isNew: false
   },
   {
-    id: "chatgpt-hs", name: "ChatGPT英会話プロンプト（高校生版）", color: "#2bb3a3",
+    id: "chatgpt-hs", name: "貼るだけ英会話（高校生版）", color: "#2bb3a3",
     catch: "コピーしてChatGPTに貼るだけで、AIと英会話の練習ができる",
     desc: "トピック別Q&A・ロールプレイ・ディスカッション・面接練習の4種類。ChatGPTの無料版で、声でも文字でも練習できます。",
     tags: ["話す"], student: true, teacher: true,
@@ -115,7 +115,7 @@ window.APPS = [
     license: "", isNew: false
   },
   {
-    id: "eiken-check", name: "英検 学習チェック", color: "#f2c12e",
+    id: "eiken-check", name: "イチトレ（英検 学習チェック）", color: "#f2c12e",
     catch: "英検2級・準2級の合格をめざす、2週間ごとの課題と単語学習",
     desc: "リーディング・リスニングは答え合わせしたプリントを写真で提出。要約・英作文はアプリで書くと、その場でAIが添削します。",
     tags: ["英検", "書く", "単語"], student: true, teacher: true,
@@ -160,7 +160,7 @@ window.APPS = [
     license: "", isNew: false
   },
   {
-    id: "chatgpt-adv", name: "ChatGPT英会話プロンプト（中〜上級版）", color: "#1a8f84",
+    id: "chatgpt-adv", name: "貼るだけ英会話（中〜上級版）", color: "#1a8f84",
     catch: "英語に自信がある人向けの、英会話練習用プロンプト集",
     desc: "",
     tags: ["話す"], student: false, teacher: true,
